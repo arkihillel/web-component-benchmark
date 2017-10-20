@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="polyperf.js"></script>
+  <link rel="import" href="frame-tester.html">
+  <!-- <script src="frame-tester2.js"></script> -->
+  <style>
+    summary {
+      font-family: sans-serif;
+      font-size: 1.5em;
+    }
+  </style>
+
+</head>
+<body>
+
+  <summary>Element Tester</summary>
+
+  <frame-tester runs="25"></frame-tester>
+
+  <script>
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }   
+
+    addEventListener('WebComponentsReady', function() {
+      document.querySelector('frame-tester').runs = config.runs || 25;
+
+      var tests = config.components.map(function(component){
+        return 'harness.html?wc-element=' + component.replace('.html', '') + '&wc-path=./' + component + '&times=' + config.times
+      });
+
+      tests.unshift(`harness.html?wc-element=${config.baseline}&times=${config.times}`);
+
+      document.querySelector('frame-tester').tests = tests;
+    });
+  </script>
+
+</body>
+</html>

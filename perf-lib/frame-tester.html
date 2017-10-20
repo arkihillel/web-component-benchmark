@@ -1,0 +1,290 @@
+  <style>
+
+    frame-tester {
+      display: block;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    frame-tester iframe {
+      position: absolute;
+      border: 0;
+      width: 1920px;
+      height: 1080px;
+      left: -2000px;
+      top: -2000px;
+      visibility: hidden;
+      xdisplay: none;
+    }
+
+    frame-tester o, frame-tester n {
+      display: inline-block;
+      xwidth: 24px;
+      margin: 2px;
+      text-align: right;
+      font-family: monospace;
+    }
+
+    frame-tester o {
+      color: rgba(255, 0, 0, 0.5);
+    }
+
+    frame-tester n {
+      display: inline-block;
+      color: green;
+      font-weight: bold;
+    }
+
+    frame-tester .card {
+      padding: 16px;
+      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
+      margin: 16px;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+  </style>
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+<template>
+
+  <div id="log"></div>
+
+  <div id="results"></div>
+
+  <div id="done"></div>
+
+  <iframe id="frame"></iframe>
+
+</template><script>
+    // Create elements here
+    (function() {
+
+      var proto = Object.create(HTMLElement.prototype);
+
+      proto._template = (document.currentScript||document._currentScript).ownerDocument.querySelector('template');
+
+      proto.createdCallback = function() {
+        this.appendChild(document.importNode(this._template.content, true));
+        this.frame = this.querySelector('#frame');
+        this.results = {};
+        this.log = this.querySelector('#log');
+        this.resultsHTML = this.querySelector('#results');
+        this.done = this.querySelector('#done');
+        this.attributeChangedCallback('runs', null, this.getAttribute('runs') || 25);
+        this.attributeChangedCallback('base', null, this.getAttribute('base') || '');
+        this.attributeChangedCallback('strategy', null, this.getAttribute('strategy') || 'minimum');
+        window.addEventListener('message', this.scoreMessage.bind(this));
+      }
+
+      proto.attributeChangedCallback = function(name, old, value) {
+        switch(name) {
+          case 'runs':
+            this.runs = value;
+            break;
+          case 'base':
+            this.base = value;
+            break;
+          case 'strategy':
+            var strategy = this.strategies[value] || this.strategies.minimum;
+            this.strategy = strategy;
+            break;
+        }
+      };
+
+      var testing = {
+
+        get tests() {
+          return this._tests;
+        },
+
+        set tests(value) {
+          this._tests = value;
+          this.go();
+        },
+
+        shuffle: function(tests) {
+          var shuffled = [];
+          var ordered = tests.slice(0);
+          var count = ordered.length;
+          for (var i=0, j; i<count; i++) {
+            j = Math.floor(Math.random()*count);
+            // TODO(sjmiles): this is an easy but poorly randomized distribution
+            for (; !ordered[j]; j = (j + 1) % count);
+            shuffled.push(j);
+            ordered[j] = null;
+          }
+          return shuffled;
+        },
+
+        go: function() {
+          this.count = 0;
+          this.results = {};
+          this.tempResults = {};
+          this.total = [];
+          this.times = [];
+          this.infos = [];
+          for (var i=0; i<this.tests.length; i++) {
+            this.total[i] = 0;
+            this.times[i] = [];
+            this.results[this.tests[i].split('wc-element=')[1].split('&')[0]] = [];
+            this.tempResults[this.tests[i].split('wc-element=')[1].split('&')[0]] = [];
+          }
+          this.startRun();
+        },
+
+        startRun: function() {
+          this.shuffled = this.shuffle(this.tests);
+          this.index = -1;
+          //console.group('run', this.count);
+          this.nextTest();
+        },
+
+        nextTest: function() {
+          // last test in this run?
+          if (++this.index === this.tests.length) {
+            //console.groupEnd();
+            // report results
+            ++this.count;
+            this.report();
+            // more runs?
+            if (this.count < this.runs) {
+              this.startRun();
+            } else {
+              // all done!
+              this.dispatchEvent(new CustomEvent('done'));
+              this.resultsHTML.innerHTML = JSON.stringify(this.results);
+              this.done.innerHTML = 'done'
+            }
+            return;
+          }
+          // test order is randomized
+          this.test = this.shuffled[this.index];
+          this.frame.src = this.base + this.tests[this.test];
+          // it's possible for a test to end before the load event fires,
+          // so assume the frame loads immediately and start waiting
+          // for a result.
+          this.load();
+        },
+
+        load: function() {
+          // frame is loaded, measure the time, then proceed
+          this.measure(function(info) {
+            this.record(info);
+            this.nextTest();
+          });
+        },
+
+        measure: function(next) {
+          this.afterScore = next;
+        },
+
+        saveResults: function(e) {
+          const data = e.data;
+          this.results[data.info.name] = this.results[data.info.name] || [];
+          this.results[data.info.name].push(data.time);
+        },
+
+
+        singleRecord: function(data) {
+          this.tempResults[data.info.name].push(data.time);
+        },
+
+        scoreMessage: function(e) {
+          if(e.data.type === 'single') {
+            return this.singleRecord(e.data);
+          }
+
+
+
+          if (this.afterScore) {
+            var info = e.data;
+            if (typeof info !== 'object') {
+              info = {time: info};
+            }
+            info.time = parseInt(info.time);
+            this.afterScore(info);
+          }
+        },
+
+        record: function(info) {
+          
+
+          // if(e.data.type === 'endedRun') {
+          if(true) {
+            this.results[info.element].push(this.tempResults[info.element].slice(0));
+            this.tempResults[info.element] = [];
+          }
+
+          if (!this.infos[this.test]) {
+            this.infos[this.test] = info;
+          }
+          this.times[this.test].push(info.time || 0);
+          this.total[this.test] += info.time || 0;
+        },
+
+        report: function() {
+          var info = '<br>Runs: ' + this.count + '/' + this.runs + '<br><br>';
+          this.log.innerHTML = info;
+        },
+
+        stats: function(a) {
+          var r = {mean: 0, variance: 0, deviation: 0}, t = a.length;
+          for (var m, s = 0, l = t; l--; s += a[l]);
+          for (m = r.mean = s / t, l = t, s = 0; l--; s += Math.pow(a[l] - m, 2));
+          r.outlier = this.strategy.outlier;
+          return r.deviation = Math.sqrt(r.variance = s / t), r;
+        },
+
+        //
+        // selectable statical strategies
+        //
+
+        strategies: {
+
+          // This strategy selects the minimum timing for score.
+          minimum: {
+            score: function(times, stats) {
+              var min = Number.MAX_VALUE;
+              for (var j=0, v; v=times[j]; j++) {
+                min = Math.min(v, min);
+              }
+              stats.score = min;
+              return min;
+            },
+            // called in stats context
+            outlier: function(value) {
+              return value > this.score;
+            }
+          },
+
+          // This strategy selects the mean of all times not more than one stddev
+          // away from the total sampling mean.
+          onedev: {
+            score: function(times, stats, context) {
+              var cleaned = [];
+              for (var j=0, v; v=times[j]; j++) {
+                if (!stats.outlier(v)) {
+                  cleaned.push(v);
+                }
+              }
+              return context.stats(cleaned).mean;
+            },
+            // called in stats context
+            outlier: function(value) {
+              return Math.abs(value - this.mean) > (1 * this.deviation);
+            }
+          }
+
+        }
+
+      };
+
+      for (var i in testing) {
+        Object.defineProperty(proto, i, Object.getOwnPropertyDescriptor(testing, i));
+      }
+
+      document.registerElement('frame-tester', {prototype: proto});
+    })();
+</script>

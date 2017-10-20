@@ -1,0 +1,21 @@
+{
+  "name": "web-component-benchmark",
+  "version": "1.0.0",
+  "bin": {
+    "swcp": "index.js"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Hillel Arki <arki.hillel@gmail.com> (https://github.com/arkihillel)",
+  "license": "ISC",
+  "dependencies": {
+    "asciichart": "^1.5.2",
+    "colors": "^1.1.2",
+    "command-line-args": "^4.0.7",
+    "command-line-usage": "^4.0.1",
+    "find": "^0.2.7",
+    "selenium-webdriver": "^3.6.0",
+    "shelljs": "^0.7.8"
+  }
+}
