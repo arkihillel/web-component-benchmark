@@ -46,7 +46,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       document.querySelector('frame-tester').runs = config.runs || 25;
 
       var tests = config.components.map(function(component){
-        return 'harness.html?wc-element=' + component.replace('.html', '') + '&wc-path=./' + component + '&times=' + config.times
+        return `harness.html?wc-element=${component.replace('.html', '')}&wc-path=./${component}&times${config.times}`
       });
 
       tests.unshift(`harness.html?wc-element=${config.baseline}&times=${config.times}`);

@@ -7,35 +7,30 @@ const writeConfig = (config, path) => {
 		runs: config.runs, 
 		components: config.components, 
 		times: config.times,
-		baseline: config.baseline
+		baseline: config.baseline,
+		path: config.path
 	};
 
 	fs.writeFileSync(`${path}/polyperf.js`, `window.config = ${JSON.stringify(frontConfiguration)}`);
 }
 
-const copy = config => {
+module.exports = config => {
 	return new Promise((resolve, reject) => {
-		shelljs.cp('-R', `${__dirname}/perf-lib/*`, `${config.path}`);
-		shelljs.rm('-rf', `${config.path}/bower_components-*`);
-		const bwr = JSON.parse(fs.readFileSync(`${config.path}/bower.json`))
+		console.log('Initialization'.bold);
+
+		// shelljs.cp('-R', `${__dirname}/perf-lib/*`, `${config.path}`);
+
+		const bwr = fs.existsSync(`${config.path}/bower.json`) ? 
+			JSON.parse(fs.readFileSync(`${config.path}/bower.json`)) : null;
+
 		config.components = config.components || bwr.main;
 
 		if(!Array.isArray(config.components))
 			config.components = [config.components];
 
 		writeConfig(config, `${config.path}`);
-		config.name = bwr.name;
+		// config.name = bwr.name;
 
 		return resolve(config);
-	});
-};
-
-module.exports = config => {
-	return new Promise((resolve, reject) => {
-		console.log('Initialization'.bold);
-
-		copy(config)
-		.then(resolve)
-		.catch(reject);
 	});
 };

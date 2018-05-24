@@ -1,25 +1,22 @@
 var webdriver = require('selenium-webdriver');
 var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
-var remoteHub = 'http://10.44.38.74:4545/wd/hub';
 
-
-
-const buildDriver = remote => {
-	if(remote)
+const buildDriver = hub => {
+	if(hub)
 		return new webdriver.Builder()
-	            .usingServer(remoteHub)
-			    .forBrowser('chrome')
-			    .build();
+		.usingServer(hub)
+		.forBrowser('chrome')
+		.build();
 
 	return new webdriver.Builder()
-		    .forBrowser('chrome')
-		    .build();
+	.forBrowser('chrome')
+	.build();
 };
 
 
 module.exports = (config, serverPid) => {
 	return new Promise((resolve, reject) => {
-		var driver = buildDriver(!config.local);
+		var driver = buildDriver(config.hub);
 
 		console.log(`Launching Selenium against ${config.served}runner.html`)
 

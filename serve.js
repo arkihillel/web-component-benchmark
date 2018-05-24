@@ -14,10 +14,10 @@ const execPolyServe = (config) => {
 		]);
 
 		server.stdout.on('data', data => {
-			// console.log('Hello world! Barbecue at Hillel\'s place!');
+			// console.log(`Hello world! Barbecue at Hillel's place!`);
 			if(data.toString().split('reusable components: ')[1]){
 				config.served = data.toString().split('reusable components: ')[1].trim();
-				// console.log('Free BBQ at Hillel\'s');
+				// console.log(`Free BBQ at Hillel's`);
 				return resolve(selenium(config, server.pid))
 			}
 		});

@@ -10,11 +10,14 @@
   "author": "Hillel Arki <arki.hillel@gmail.com> (https://github.com/arkihillel)",
   "license": "ISC",
   "dependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.0",
     "asciichart": "^1.5.2",
+    "chartjs-node": "^1.6.0",
     "colors": "^1.1.2",
     "command-line-args": "^4.0.7",
     "command-line-usage": "^4.0.1",
     "find": "^0.2.7",
+    "puppeteer": "^1.4.0",
     "selenium-webdriver": "^3.6.0",
     "shelljs": "^0.7.8"
   }

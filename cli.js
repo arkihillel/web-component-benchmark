@@ -25,14 +25,14 @@ const cliDefinition = [
 	{
 		name: 'runs',
 		type: Number,
-		defaultValue: 25,
-		description: 'Number of times the harness run (defaults to 25)'
+		defaultValue: 10,
+		description: 'Number of times the harness run (defaults to 10)'
 	},
 	{
 		name: 'times',
 		type: Number,
-		defaultValue: 250,
-		description: 'Number of times the element is instantiated per harness run (defaults to 250)'
+		defaultValue: 100,
+		description: 'Number of times the element is instantiated per harness run (defaults to 100)'
 	},
 	{
 		name: 'baseline',
@@ -49,25 +49,22 @@ const cliDefinition = [
 		description: 'Which components you want to benchmark (defaults to the content of bower.json "main" entry)'
 	},
 	{
-		name: 'host',
+		name: 'hub',
 		type: String,
-		defaultValue: '127.0.0.1',
-		description: 'Host adress (defaults to 127.0.0.1)'
+		defaultValue: false,
+		description: 'Remote selenium hub address (leave empty for local)'
 	},
 	{
-		name: 'local',
-		type: Boolean,
-		defaultValue: false,
-		description: 'Run the benchmark against a local Selenium instead of a remote one (Default to false)'
+		name: 'regression-testing',
+		alias: 'r',
+		type: String,
+		multiple: true,
+		defaultValue: [],
+		description: `Tests against a previous version of the component
+- "last" – Last Git tag
+- "tags/[xxx]" – compares against a specific Git tag
+- [commit-hash] – compares against a specific Git commit`
 	},
-	// {
-	// 	name: 'regression-testing',
-	// 	alias: 'r',
-	// 	type: String,
-	// 	multiple: true,
-	// 	defaultValue: [],
-	// 	description: 'Tests against a previous version of the component\n- "last" – Last Git tag\n- "tags/[xxx]" – compares against a specific Git tag\n- [commit-hash] – compares against a specific Git commit'
-	// },
 	{
 		name: 'quiet',
 		alias: 'q',
@@ -82,12 +79,6 @@ const cliDefinition = [
 		defaultValue: process.cwd(),
 		description: 'Path to the component'
 	}, 
-	// {
-	// 	name: 'keep-copied-files',
-	// 	type: Boolean,
-	// 	defaultValue: false,
-	// 	description: 'Keep copied files after the run – Defaults to false'
-	// }, 
 	{
 		name: 'verbose',
 		alias: 'v',

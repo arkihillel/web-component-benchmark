@@ -10,8 +10,6 @@ module.exports = config => {
 
 		for(let version of regressions) {
 			config.waiting[version] = config.browser;
-			// serve.start(config)
-			// .then(console.log)
 			return resolve(serve.start(config));
 		}
 	});
