@@ -1,5 +1,5 @@
-var webdriver = require('selenium-webdriver');
-var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
+let webdriver = require('selenium-webdriver');
+let SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
 
 const buildDriver = hub => {
 	if(hub)
@@ -16,19 +16,20 @@ const buildDriver = hub => {
 
 module.exports = (config, serverPid) => {
 	return new Promise((resolve, reject) => {
-		var driver = buildDriver(config.hub);
+		let driver = buildDriver(config.hub);
 
-		console.log(`Launching Selenium against ${config.served}runner.html`)
+		console.log(`Launching Selenium against ${config.served}__benchmark_runner.html`)
 
-		driver.get(`${config.served}runner.html`);
+		driver.get(`${config.served}__benchmark_runner.html`);
 
 
-		var element = driver.findElement(webdriver.By.id('results'));
-		var done = driver.findElement(webdriver.By.id('done'));
+		let element = driver.findElement(webdriver.By.id('results'));
+		let done = driver.findElement(webdriver.By.id('done'));
 
 		driver.wait(webdriver.until.elementTextContains(done, 'done'), 3600000)
 
-		// console.log('Come join the BBQ at Hillel\'s. Free beer!');
+		if(config.easter)
+			console.log('Come join the BBQ at Hillel\'s. Free beer!');
 
 		element.getText().then(results => {
 			driver.quit();

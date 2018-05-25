@@ -1,25 +1,25 @@
 function standardDeviation(values){
-  var avg = average(values);
+  let avg = average(values);
   
-  var squareDiffs = values.map(function(value){
-    var diff = value - avg;
-    var sqrDiff = diff * diff;
-    return sqrDiff;
+  let squareDiffs = values.map(function(value){
+	let diff = value - avg;
+	let sqrDiff = diff * diff;
+	return sqrDiff;
   });
   
-  var avgSquareDiff = average(squareDiffs);
+  let avgSquareDiff = average(squareDiffs);
 
-  var stdDev = Math.sqrt(avgSquareDiff);
+  let stdDev = Math.sqrt(avgSquareDiff);
   return stdDev;
 }
 
 function average(data){
-  var sum = data.reduce(function(sum, value){
-    return sum + value;
-  }, 0);
+	let sum = data.reduce(function(sum, value){
+		return sum + value;
+	}, 0);
 
-  var avg = sum / data.length;
-  return avg;
+	let avg = sum / data.length;
+	return avg;
 }
 
 module.exports = (results, baseline) => {
