@@ -8,7 +8,7 @@ const execPolyServe = (config) => {
 		const server = spawn('polymer', [
 			`serve`, 
 			`--root ${config.path}`, 
-			`--open-path components/${config.name}/runner.html`, 
+			`--open-path components/${config.name}/__benchmark_runner.html`, 
 			`--sources harness.html`, 
 			'-H 0.0.0.0'
 		]);

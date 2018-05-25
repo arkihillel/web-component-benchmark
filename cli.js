@@ -8,20 +8,20 @@ const cliDefinition = [
 		type: String,
 		description: 'Save the results to a JSON file'
 	}, 
-	{
-		name: 'browser',
-		alias: 'b',
-		type: String,
-		defaultValue: [],
-		description: 'Browser against which the performance test will be run – Default: [chrome]'
-	},
-	{
-		name: 'all-browsers',
-		alias: 'a',
-		type: Boolean,
-		defaultValue: false,
-		description: 'Runs against all avaliable browsers'
-	},
+	// {
+	// 	name: 'browser',
+	// 	alias: 'b',
+	// 	type: String,
+	// 	defaultValue: [],
+	// 	description: 'Browser against which the performance test will be run – Default: [chrome]'
+	// },
+	// {
+	// 	name: 'all-browsers',
+	// 	alias: 'a',
+	// 	type: Boolean,
+	// 	defaultValue: false,
+	// 	description: 'Runs against all avaliable browsers'
+	// },
 	{
 		name: 'runs',
 		type: Number,
@@ -55,17 +55,6 @@ const cliDefinition = [
 		description: 'Remote selenium hub address (leave empty for local)'
 	},
 	{
-		name: 'regression-testing',
-		alias: 'r',
-		type: String,
-		multiple: true,
-		defaultValue: [],
-		description: `Tests against a previous version of the component
-- "last" – Last Git tag
-- "tags/[xxx]" – compares against a specific Git tag
-- [commit-hash] – compares against a specific Git commit`
-	},
-	{
 		name: 'quiet',
 		alias: 'q',
 		type: Boolean,
@@ -91,7 +80,12 @@ const cliDefinition = [
 		alias: 'h',
 		type: Boolean,
 		description: 'This page'
-	}
+	},
+	{
+		name: 'easter',
+		type: Boolean,
+		defaultValue: false
+	}  
 ];
 
 const config = cli(cliDefinition);
@@ -100,13 +94,17 @@ const config = cli(cliDefinition);
 if (config.help) {
 	const getUsage = require('command-line-usage');
 
+	// hide the easter egg
+	cliDefinition.splice(cliDefinition.length - 1, 1);
+
 	const sections = [{
 		header: 'Web Component Benchmark',
 		content: 'Benchmarks Web Components by running them multiple time'
 	}, {
 		header: 'Options',
 		optionList: cliDefinition
-	}]
+	}];
+
 	const usage = getUsage(sections);
 
 	console.log(usage);

@@ -11,12 +11,17 @@ const writeConfig = (config, path) => {
 		path: config.path
 	};
 
-	fs.writeFileSync(`${path}/polyperf.js`, `window.config = ${JSON.stringify(frontConfiguration)}`);
+	fs.writeFileSync(`${path}/__benchmark_config.js`, `window.config = ${JSON.stringify(frontConfiguration)}`);
 }
 
 module.exports = config => {
 	return new Promise((resolve, reject) => {
 		console.log('Initialization'.bold);
+
+		fs.symlinkSync(`${__dirname}/perf-lib/runner.html`, `${config.path}/__benchmark_runner.html`)
+		fs.symlinkSync(`${__dirname}/perf-lib/harness.html`, `${config.path}/__benchmark_harness.html`)
+		fs.symlinkSync(`${__dirname}/node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js`, `${config.path}/__benchmark_webcomponentsjs-lite.js`);
+		fs.symlinkSync(`${__dirname}/node_modules/@polymer/polymer/polymer.html`, `${config.path}/__benchmark_polymer.html`);
 
 		// shelljs.cp('-R', `${__dirname}/perf-lib/*`, `${config.path}`);
 

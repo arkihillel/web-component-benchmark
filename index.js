@@ -34,7 +34,7 @@ init(config)
 
 })
 .then(() => {
-	// return clean(config)
+	return clean(config)
 })
 .catch(err => {
 	console.log(err);
