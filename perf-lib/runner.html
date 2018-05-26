@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
 
   <meta charset="utf-8">
-  <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <!-- <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script> -->
   <script src="__benchmark_config.js"></script>
   <style>
     summary {
@@ -98,6 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </style>
 
               <div id="log"></div>
+              <h1 id="element"></h1>
 
               <iframe id="frame"></iframe>`;
         }
@@ -119,6 +120,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.log = this.shadowRoot.querySelector('#log');
             this.resultsHTML = this.shadowRoot.querySelector('#results');
             this.done = this.shadowRoot.querySelector('#done');
+            this.element = this.shadowRoot.querySelector('#element');
             
 
             window.addEventListener('message', (e) => this.scoreMessage(e));
@@ -191,6 +193,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           // test order is randomized
           this.test = this.shuffled[this.index];
+
+          this.element.innerHTML = `Benchmarking: ${this.tests[this.test].split('wc-element=')[1].split('&')[0]}`;
+
           this.frame.src = this.base + this.tests[this.test];
           // it's possible for a test to end before the load event fires,
           // so assume the frame loads immediately and start waiting

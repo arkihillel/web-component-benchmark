@@ -18,6 +18,7 @@ module.exports = (config, serverPid) => {
 	return new Promise((resolve, reject) => {
 		let driver = buildDriver(config.hub);
 
+		if (config.verbose) console.log(JSON.stringify(config, null, 2).grey);
 		console.log(`Launching Selenium against ${config.served}/__benchmark_runner.html`)
 
 		driver.get(`${config.served}/__benchmark_runner.html`);
