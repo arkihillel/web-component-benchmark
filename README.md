@@ -17,24 +17,25 @@ npm i -g web-component-benchmark
 ## Example
 
 ```bash
-wcb -c paper-input
+wcb -c src/my-component.html
 ```
 
 ## Usage
 
 ```bash
--o, --output string                 Save the results to a JSON file                                               
---runs number                       Number of times the harness run (defaults to 10)                              
---times number                      Number of times the element is instantiated per harness run (defaults to 100) 
---baseline string                   Base native HTML tag against which performence will be measured (defaults to  
-                                    input)                                                                        
--c, --components string[]           Which components you want to benchmark (defaults to the content of bower.json 
-                                    "main" entry)                                                                 
---hub string                        Remote selenium hub address (leave empty for local)                           
--q, --quiet                         Silence output                                                                
--p, --path string                   Path to the component                                                         
--v, --verbose                       Verbose mode                                                                  
--h, --help                          This page 
+  -o, --output string         Save the results to a JSON file                                               
+  --runs number               Number of times the harness run (defaults to 10)                              
+  --times number              Number of times the element is instantiated per harness run (defaults to 100) 
+  --baseline string           Base native HTML tag against which performence will be measured (defaults to  
+                              input)                                                                        
+  -c, --components string[]   Which components you want to benchmark (defaults to the content of bower.json 
+                              "main" entry)                                                                 
+  --hub string                Remote selenium hub address (leave empty for local)                           
+  -q, --quiet                 Silence output                                                                
+  --root string               Root of the project (defaults to current location)                            
+  -p, --path string           Path to the component (defaults to current location)                          
+  -v, --verbose               Verbose mode                                                                  
+  -h, --help                  This page 
 ```
 
 ## Future releases
