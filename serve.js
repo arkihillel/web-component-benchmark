@@ -7,17 +7,15 @@ const execPolyServe = (config) => {
 
 		const server = spawn('polymer', [
 			`serve`, 
-			`--root ${config.path}`, 
-			`--open-path components/${config.name}/__benchmark_runner.html`, 
-			`--sources harness.html`, 
+			`--root ${config.root}`, 
+			`--open-path ${config.root}/__benchmark_runner.html`, 
+			`--sources __benchmark_harness.html`, 
 			'-H 0.0.0.0'
 		]);
 
 		server.stdout.on('data', data => {
-			// console.log(`Hello world! Barbecue at Hillel's place!`);
-			if(data.toString().split('reusable components: ')[1]){
-				config.served = data.toString().split('reusable components: ')[1].trim();
-				// console.log(`Free BBQ at Hillel's`);
+			if(data.toString().split('applications: ')[1]){
+				config.served = data.toString().split('applications: ')[1].trim().split('\n')[0];
 				return resolve(selenium(config, server.pid))
 			}
 		});
@@ -32,3 +30,4 @@ module.exports = {
 	start: execPolyServe,
 	stop: killPid
 };
+

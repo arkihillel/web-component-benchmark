@@ -1,5 +1,6 @@
 const colors 	= require('colors');
 const cli 		= require('command-line-args');
+const path 		= require('path');
 
 const cliDefinition = [
 	{
@@ -62,11 +63,17 @@ const cliDefinition = [
 		description: 'Silence output'
 	}, 
 	{
+		name: 'root',
+		type: String,
+		defaultValue: process.cwd(),
+		description: 'Root of the project (defaults to current location)'
+	}, 
+	{
 		name: 'path',
 		alias: 'p',
 		type: String,
 		defaultValue: process.cwd(),
-		description: 'Path to the component'
+		description: 'Path to the component (defaults to current location)'
 	}, 
 	{
 		name: 'verbose',
@@ -113,10 +120,14 @@ if (config.help) {
 
 if (config.verbose) console.log(JSON.stringify(config, null, 2).grey);
 
+config.root = path.resolve(process.cwd(), config.root);
+
 if(!config.components.length) 
 	config.components = null;
 else
-	config.components = config.components.map(component => `${component}.html`)
+	config.components = config.components.map(component => 
+		`${path.resolve(config.root, component).replace(config.root + '/', '')}`
+	);
 
 config.regressions = config['regression-testing'];
 

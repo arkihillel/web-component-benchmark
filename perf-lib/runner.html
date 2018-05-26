@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
 
   <meta charset="utf-8">
-  <script src="__benchmark_webcomponentsjs-lite.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
   <script src="__benchmark_config.js"></script>
   <style>
     summary {
@@ -295,7 +295,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       document.querySelector('frame-tester').runs = config.runs || 25;
 
       var tests = config.components.map(function(component){
-        return `__benchmark_harness.html?wc-element=${component.replace('.html', '')}&wc-path=./${component}&times${config.times}`
+        return `__benchmark_harness.html?wc-element=${component.name}&wc-path=./${component.path}&times${config.times}`
       });
 
       tests.unshift(`__benchmark_harness.html?wc-element=${config.baseline}&times=${config.times}`);

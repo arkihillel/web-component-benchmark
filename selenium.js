@@ -18,9 +18,9 @@ module.exports = (config, serverPid) => {
 	return new Promise((resolve, reject) => {
 		let driver = buildDriver(config.hub);
 
-		console.log(`Launching Selenium against ${config.served}__benchmark_runner.html`)
+		console.log(`Launching Selenium against ${config.served}/__benchmark_runner.html`)
 
-		driver.get(`${config.served}__benchmark_runner.html`);
+		driver.get(`${config.served}/__benchmark_runner.html`);
 
 
 		let element = driver.findElement(webdriver.By.id('results'));
