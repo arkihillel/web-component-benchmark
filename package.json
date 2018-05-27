@@ -1,6 +1,6 @@
 {
   "name": "web-component-benchmark",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "bin": {
     "wcb": "index.js"
   },

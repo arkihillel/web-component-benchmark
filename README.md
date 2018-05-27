@@ -1,6 +1,6 @@
 # web-component-benchmark - alpha 1
 
-A tool that aims to provide benchmarks for Polymer 2 web components
+A tool that aims to provide benchmarks for Polymer 1 and 2 web components
 The benchmark is simply made by measuring the time it takes to instantiate a component.
 It runs multiple times in order to get statiscally significant results
 
@@ -12,6 +12,12 @@ This theoretically also allows detecting memory leaks like the one on [paper-inp
 
 ```bash
 npm i -g web-component-benchmark
+```
+
+If Selenium cannot find the Chrome webdriver:
+
+```bash
+npm i -g chromedriver
 ```
 
 ## Example
@@ -41,8 +47,8 @@ wcb -c src/my-component.html
 ## Future releases
 
 This is still an alpha tool, multiple issues are still to be solved:
-- Support Polymer 1 and 3 as well as vanilla components and lit elements
-- Support all the common browsers
+- Support Polymer 3 as well as vanilla components and lit elements
+- Support IE11, Edge, Firefox, Safari and Opera
 - Pass the benchmark runner and its dependencies as a data/html string instead of copying them over and removing them
 - Tests!
 - I'm currently considering regression testing for use in a CI environment
